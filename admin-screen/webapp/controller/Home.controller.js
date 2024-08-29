@@ -14,6 +14,9 @@ function (Controller,Device,JSONModel,Popover,Button,library) {
             var oModel = new JSONModel(sap.ui.require.toUrl("com/app/adminscreen/model/data.json"));
             this.getView().setModel(oModel);
             this._setToggleButtonTooltip(!Device.system.desktop);
+            var oModelV2 = this.getOwnerComponent().getModel();
+            this.getView().byId("pageContainer").setModel(oModelV2);
+ 
 
         },
         onItemSelect: function (oEvent) {
@@ -61,6 +64,5 @@ function (Controller,Device,JSONModel,Popover,Button,library) {
                 oToggleButton.setTooltip('Small Size Navigation');
             }
         },
-       
     });
 });

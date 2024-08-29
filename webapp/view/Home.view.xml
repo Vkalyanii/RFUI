@@ -42,7 +42,6 @@
                     />
                     <Input
                         id="IdResourceInput"
-                        type="Password"
                         placeholder="Enter Resource ID"
                         width="100%"
                         textAlign="Initial"
@@ -58,6 +57,7 @@
                         placeholder="Enter Password"
                         width="100%"
                         textAlign="Initial"
+                        type="Password"
                     />
                     <Link
                         id="_IDforgotLink"

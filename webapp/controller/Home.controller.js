@@ -1,9 +1,10 @@
 sap.ui.define([
     "./BaseController",
     "sap/ui/Device",
-    "sap/m/MessageBox"
+    "sap/m/MessageBox",
+    'sap/ui/core/SeparatorItem',
 ],
-    function (Controller, Device, MessageBox) {
+    function (Controller, Device, MessageBox, SeparatorItem) {
         "use strict";
 
         return Controller.extend("com.app.rfscreens.controller.Home", {
@@ -15,9 +16,9 @@ sap.ui.define([
                     this.ologinDialog.close()
                 }
             },
-            onResourceLoginBtnPress: function () {
-                this.getRouter().navTo("RouteUsermenu")
-            },
+            // onResourceLoginBtnPress: function () {
+            //     this.getRouter().navTo("RouteUsermenu")
+            // },
             onPressSignupBtn: async function () {
                 if (!this.oActiveLoansDialog) {
                     this.oActiveLoansDialog = await this.loadFragment("SignUpDetails")
@@ -40,93 +41,81 @@ sap.ui.define([
             },
             onClearRegisterDialog: function () {
                 var oView = this.getView();
-
-                // Clear the value of each input field
-                oView.byId("idPhoneNumberInput").setValue("");
+                oView.byId("idEmployeeIDInput").setValue("");
+                oView.byId("idResourceNameInput").setValue("");
                 oView.byId("idCreatePasswordInput").setValue("");
                 oView.byId("idInputuserType").setValue("");
-                oView.byId("idInputuserType8").setValue("");
+                oView.byId("idInputPhoneNumber").setValue("");
 
-                // Clear the value of each ComboBox
-                oView.byId("_IDGenComboBox1").setSelectedKey("");
-                oView.byId("_IDGenComboBox5").setSelectedKey("");
-                oView.byId("_IDGenComboBox2").setSelectedKey("");
-                oView.byId("_IDGenComboBox3").setSelectedKey("");
+                // Unselect checkboxes
+                oView.byId("idRoesurcetypeInput").setSelectedItem(null);
+
+                // Clear the selected keys from GroupSelect MultiComboBox
+                oView.byId("GroupSelect").setSelectedKeys([]);
+
+                // Reset other controls if necessary
+                oView.byId("idAreaInboundCheckBox").setSelected(false);
+                oView.byId("idAreaOutboundCheckBox").setSelected(false);
+                oView.byId("idAreaInternalCheckBox").setSelected(false);
             },
             /**Based on Selected key DropDown Should be visible */
-            // onSelect: function (oEvent) {
-            //     var oArea = oEvent.getSource().getSelectedKey();
-            //     if (oArea === 'Inbound') {
-            //         this.byId("_IDGenComboBox2").setVisible(true);
-            //         this.byId("_IDGenComboBox3").setVisible(false);
-            //         this.byId("_IDGenComboBox4").setVisible(false);
-            //         this.byId("_IDGenComboBox5").setVisible(false);
-
-            //     } else if (oArea === 'Outbound') {
-            //         this.byId("_IDGenComboBox2").setVisible(false);
-            //         this.byId("_IDGenComboBox3").setVisible(true);
-            //         this.byId("_IDGenComboBox4").setVisible(false);
-            //         this.byId("_IDGenComboBox5").setVisible(false);
-
-            //     } else if (oArea === 'Internal') {
-            //         this.byId("_IDGenComboBox2").setVisible(false);
-            //         this.byId("_IDGenComboBox3").setVisible(false);
-            //         this.byId("_IDGenComboBox4").setVisible(true);
-            //         this.byId("_IDGenComboBox5").setVisible(false);
-            //     } else {
-            //         this.byId("_IDGenComboBox2").setVisible(false);
-            //         this.byId("_IDGenComboBox3").setVisible(false);
-            //         this.byId("_IDGenComboBox4").setVisible(false);
-            //         this.byId("_IDGenComboBox5").setVisible(true);
-            //     }
-            // },
             onCheckBoxSelect: function () {
-                // Retrieve the checkbox states
+                // Get the checkbox states
                 var isInboundSelected = this.byId("inboundCheckBox").getSelected();
                 var isOutboundSelected = this.byId("outboundCheckBox").getSelected();
                 var isInternalSelected = this.byId("internalCheckBox").getSelected();
-            
-                // Control visibility of ComboBoxes based on selected checkboxes
+
+                // Create a filter array to hold the selected filters
+                var filters = [];
+
                 if (isInboundSelected) {
-                    this.byId("_IDGenComboBox2").setVisible(true);
-                } else {
-                    this.byId("_IDGenComboBox2").setVisible(false);
+                    filters.push(new sap.ui.model.Filter("Area", sap.ui.model.FilterOperator.EQ, "Inbound"));
                 }
-            
                 if (isOutboundSelected) {
-                    this.byId("_IDGenComboBox3").setVisible(true);
-                } else {
-                    this.byId("_IDGenComboBox3").setVisible(false);
+                    filters.push(new sap.ui.model.Filter("Area", sap.ui.model.FilterOperator.EQ, "Outbound"));
                 }
-            
                 if (isInternalSelected) {
-                    this.byId("_IDGenComboBox4").setVisible(true);
-                } else {
-                    this.byId("_IDGenComboBox4").setVisible(false);
+                    filters.push(new sap.ui.model.Filter("Area", sap.ui.model.FilterOperator.EQ, "Internal"));
                 }
-            
-                // Set visibility for any additional ComboBoxes if required
-                this.byId("_IDGenComboBox5").setVisible(!isInboundSelected && !isOutboundSelected && !isInternalSelected);
-            },            
+
+                // Get the Select control and bind it with the filtered data
+                var oMultiComboBox = this.byId("GroupSelect");
+                var oModel = this.getView().getModel();
+
+                // Create the binding
+                oMultiComboBox.bindAggregation("items", {
+                    path: "/RFUISet",
+                    template: new sap.ui.core.Item({
+                        key: "{Resourcegroup}",
+                        text: "{Resourcegroup}"
+                    }),
+                    filters: filters,
+                    sorter: {
+                        path: "Area",
+                        group: true
+                    },
+                    groupHeaderFactory: this.getGroupHeader.bind(this)
+                });
+            },
             /**Getting Signup form Details*/
             onSubmitPress: function () {
 
                 const oUserView = this.getView();
-                var oArea = this.byId("_IDGenComboBox1").getSelectedKey();
-                /**here OArea may be inbound,outbound or Internal based on OArea we get the values */
-                var oItem;
-                if (oArea === 'Inbound') {
-                    oItem = this.byId("_IDGenComboBox2").getSelectedKey();
-                } else if (oArea === 'Outbound') {
-                    oItem = this.byId("_IDGenComboBox3").getSelectedKey();
-                } else {
-                    oItem = this.byId("_IDGenComboBox4").getSelectedKey();
-                }
+                // Get the form inputs
+                var sEmployeeID = this.byId("idEmployeeIDInput").getValue();
+                var sResourceName = this.byId("idResourceNameInput").getValue();
+                var oResourceTypeComboBox = oUserView.byId("idRoesurcetypeInput");
+                var oSelectedItem = oResourceTypeComboBox.getSelectedItem();
+                var sPhone = this.byId("idInputPhoneNumber").getValue();
+                var oEmail = this.byId("idInputEmail").getValue();
 
-                var oResource = this.byId("idPhoneNumberInput").getValue();
-                var oUsername = this.byId("idCreatePasswordInput").getValue();
-                var oEmail = this.byId("idInputuserType").getValue();
-                var oPhone = this.byId("idInputuserType8").getValue();
+                // Get the selected checkboxes
+                var oArea = this.getSelectedArea();
+                // Get the selected groups from the MultiComboBox
+                var oItem = this.byId("GroupSelect").getSelectedKeys();
+                var resourceGroup = oItem.join(", ");
+
+
                 /**generating Password */
                 function generatePassword() {
                     const regex = /[A-Za-z@!#$%&]/;
@@ -146,82 +135,83 @@ sap.ui.define([
                 var oPassword = generatePassword();
 
                 var bValid = true;
+                var bAllFieldsFilled = true;
+
                 // Validate fields and set value state and messages
-                if (!oArea) {
-                    oUserView.byId("_IDGenComboBox1").setValueState("Error");
-                    oUserView.byId("_IDGenComboBox1").setValueStateText("Select a Area");
+                if (!sEmployeeID) {
+                    oUserView.byId("idEmployeeIDInput").setValueState("Information");
+                    oUserView.byId("idEmployeeIDInput").setValueStateText("Employee ID is mandatory");
+                    bValid = false;
+                    bAllFieldsFilled = false;
+                } else if (!/^\d{6}$/.test(sEmployeeID)) {
+                    oUserView.byId("idEmployeeIDInput").setValueState("Information");
+                    oUserView.byId("idEmployeeIDInput").setValueStateText("Resource ID must be a 6-digit numeric value");
                     bValid = false;
                 } else {
-                    oUserView.byId("_IDGenComboBox1").setValueState("None");
+                    oUserView.byId("idEmployeeIDInput").setValueState("None");
                 }
 
-                if (!oResource) {
-                    oUserView.byId("idPhoneNumberInput").setValueState("Error");
-                    oUserView.byId("idPhoneNumberInput").setValueStateText("Resource ID cannot be empty");
+                if (!sResourceName) {
+                    oUserView.byId("idResourceNameInput").setValueState("Information");
+                    oUserView.byId("idResourceNameInput").setValueStateText("Resource Name cannot be empty");
+                    bValid = false;
+                    bAllFieldsFilled = false;
+                } else {
+                    oUserView.byId("idResourceNameInput").setValueState("None");
+                }
+
+                if (!oSelectedItem) {
+                    oUserView.byId("idRoesurcetypeInput").setValueState("Information");
+                    oUserView.byId("idRoesurcetypeInput").setValueStateText("Please select Resource Type");
+                    bValid = false;
+                    bAllFieldsFilled = false;
+                } else {
+                    oUserView.byId("idRoesurcetypeInput").setValueState("None");
+                }
+
+                // Validate Phone Number
+                if (!sPhone) {
+                    oUserView.byId("idInputPhoneNumber").setValueState("Information");
+                    oUserView.byId("idInputPhoneNumber").setValueStateText("Phone number is mandatory");
+                    bValid = false;
+                    bAllFieldsFilled = false;
+                } else if (sPhone.length !== 10 || !/^\d+$/.test(sPhone)) {
+                    oUserView.byId("idInputPhoneNumber").setValueState("Information");
+                    oUserView.byId("idInputPhoneNumber").setValueStateText("Phone number must be a 10-digit numeric value");
                     bValid = false;
                 } else {
-                    oUserView.byId("idPhoneNumberInput").setValueState("None");
+                    oUserView.byId("idInputPhoneNumber").setValueState("None");
                 }
 
-                if (!oUsername) {
-                    oUserView.byId("idCreatePasswordInput").setValueState("Error");
-                    oUserView.byId("idCreatePasswordInput").setValueStateText("Username cannot be empty");
-                    bValid = false;
-                } else {
-                    oUserView.byId("idCreatePasswordInput").setValueState("None");
-                }
-
-                if (!oEmail) {
-                    oUserView.byId("idInputuserType").setValueState("Error");
-                    oUserView.byId("idInputuserType").setValueStateText("Email cannot be empty");
-                    bValid = false;
-                } else {
-                    oUserView.byId("idInputuserType").setValueState("None");
-                }
-
-                if (!oPhone || oPhone.length !== 10 || !/^\d+$/.test(oPhone)) {
-                    oUserView.byId("idInputuserType8").setValueState("Error");
-                    oUserView.byId("idInputuserType8").setValueStateText("Mobile number must be a 10-digit numeric value");
-                    bValid = false;
-                } else {
-                    oUserView.byId("idInputuserType8").setValueState("None");
-                }
-
-                // Validate the ComboBox based on the selected area
-                if (oArea === 'Inbound') {
-                    if (!oItem) {
-                        oUserView.byId("_IDGenComboBox2").setValueState("Error");
-                        oUserView.byId("_IDGenComboBox2").setValueStateText("Select a value from Inbound process");
-                        bValid = false;
-                    } else {
-                        oUserView.byId("_IDGenComboBox2").setValueState("None");
-                    }
-                } else if (oArea === 'Outbound') {
-                    if (!oItem) {
-                        oUserView.byId("_IDGenComboBox3").setValueState("Error");
-                        oUserView.byId("_IDGenComboBox3").setValueStateText("Select a value from Outbound process");
-                        bValid = false;
-                    } else {
-                        oUserView.byId("_IDGenComboBox3").setValueState("None");
-                    }
-                } else if (oArea === 'Internal') {
-                    if (!oItem) {
-                        oUserView.byId("_IDGenComboBox4").setValueState("Error");
-                        oUserView.byId("_IDGenComboBox4").setValueStateText("Select a value from Internal process");
-                        bValid = false;
-                    } else {
-                        oUserView.byId("_IDGenComboBox4").setValueState("None");
-                    }
+                if (!bAllFieldsFilled) {
+                    sap.m.MessageToast.show("Please fill all mandatory details");
+                    return;
                 }
 
                 if (!bValid) {
-                    sap.m.MessageToast.show("Please fill all the required fileds");
+                    sap.m.MessageToast.show("Please enter correct data");
+                    return;
+                }
+
+
+                if (!bValid) {
+                    sap.m.MessageToast.show("Please fill all the required fields correctly.");
                     return; // Prevent further execution
                 }
 
                 var oModel = this.getView().getModel();
                 var that = this;
-                oModel.create("/RFUISet", { Resourceid: oResource, Validity: false, Resourcename: oUsername, Area: oArea, Email: oEmail, Phonenumber: oPhone, Password: oPassword, Resourcegroup: oItem }, {
+                oModel.create("/RFUISet", {
+                    Resourceid: sEmployeeID,
+                    Validity: false,
+                    Resourcename: sResourceName,
+                    Resouecetype: oSelectedItem.getKey(), // assuming getKey() gives the value you need
+                    Area: oArea,
+                    Email: oEmail,
+                    Phonenumber: sPhone,
+                    Resourcegroup: resourceGroup,
+                    Password :oPassword
+                }, {
                     success: function (oData) {
                         sap.m.MessageToast.show("your details are sent to supervisior please wait until you get the approval");
                         that.oActiveLoansDialog.close();
@@ -230,149 +220,98 @@ sap.ui.define([
                         MessageBox.error("Error");
                     }
                 })
+                oUserView.byId("idEmployeeIDInput").setValue("");
+                oUserView.byId("idResourceNameInput").setValue("");
+                oUserView.byId("idCreatePasswordInput").setValue("");
+                oUserView.byId("idInputuserType").setValue("");
+                oUserView.byId("idInputPhoneNumber").setValue("");
+
+                // Unselect checkboxes
+                oUserView.byId("idRoesurcetypeInput").setSelectedItem(null);
+
+                // Clear the selected keys from GroupSelect MultiComboBox
+                oUserView.byId("GroupSelect").setSelectedKeys([]);
+
+                // Reset other controls if necessary
+                oUserView.byId("idAreaInboundCheckBox").setSelected(false);
+                oUserView.byId("idAreaOutboundCheckBox").setSelected(false);
+                oUserView.byId("idAreaInternalCheckBox").setSelected(false);
             },
-            onSubmitPress: function () {
-                const oUserView = this.getView();
-                
-                // Get selected process areas
-                let selectedAreas = [];
-                if (oUserView.byId("inboundCheckBox").getSelected()) {
-                    selectedAreas.push("Inbound");
-                }
-                if (oUserView.byId("outboundCheckBox").getSelected()) {
-                    selectedAreas.push("Outbound");
-                }
-                if (oUserView.byId("internalCheckBox").getSelected()) {
-                    selectedAreas.push("Internal");
-                }
-            
-                // Get selected values from ComboBoxes based on selected areas
-                let selectedItems = {};
-                if (selectedAreas.includes('Inbound')) {
-                    selectedItems['Inbound'] = oUserView.byId("_IDGenComboBox2").getSelectedKey();
-                }
-                if (selectedAreas.includes('Outbound')) {
-                    selectedItems['Outbound'] = oUserView.byId("_IDGenComboBox3").getSelectedKey();
-                }
-                if (selectedAreas.includes('Internal')) {
-                    selectedItems['Internal'] = oUserView.byId("_IDGenComboBox4").getSelectedKey();
-                }
-            
-                // Get values from other inputs
-                var oResource = this.byId("idEmployeeIDInput").getValue();
-                var oUsername = this.byId("idResourceNameInput").getValue();
-                var oEmail = this.byId("idInputEmail").getValue();
-                var oPhone = this.byId("idInputPhoneNumber").getValue();
-            
-                // Generate Password
-                function generatePassword() {
-                    const regex = /[A-Za-z@!#$%&]/;
-                    const passwordLength = 8;
-                    let password = "";
-            
-                    for (let i = 0; i < passwordLength; i++) {
-                        let char = '';
-                        while (!char.match(regex)) {
-                            char = String.fromCharCode(Math.floor(Math.random() * 94) + 33);
-                        }
-                        password += char;
-                    }
-            
-                    return password;
-                }
-                var oPassword = generatePassword();
-            
-                // Validation
-                var bValid = true;
-            
-                if (selectedAreas.length === 0) {
-                    sap.m.MessageToast.show("Select at least one Process Area");
-                    bValid = false;
-                }
-            
-                if (!oResource) {
-                    oUserView.byId("idEmployeeIDInput").setValueState("Error");
-                    oUserView.byId("idEmployeeIDInput").setValueStateText("Employee ID cannot be empty");
-                    bValid = false;
-                } else {
-                    oUserView.byId("idEmployeeIDInput").setValueState("None");
-                }
-            
-                if (!oUsername) {
-                    oUserView.byId("idResourceNameInput").setValueState("Error");
-                    oUserView.byId("idResourceNameInput").setValueStateText("Resource Name cannot be empty");
-                    bValid = false;
-                } else {
-                    oUserView.byId("idResourceNameInput").setValueState("None");
-                }
-            
-                if (!oEmail) {
-                    oUserView.byId("idInputEmail").setValueState("Error");
-                    oUserView.byId("idInputEmail").setValueStateText("Email cannot be empty");
-                    bValid = false;
-                } else {
-                    oUserView.byId("idInputEmail").setValueState("None");
-                }
-            
-                if (!oPhone || oPhone.length !== 10 || !/^\d+$/.test(oPhone)) {
-                    oUserView.byId("idInputPhoneNumber").setValueState("Error");
-                    oUserView.byId("idInputPhoneNumber").setValueStateText("Mobile number must be a 10-digit numeric value");
-                    bValid = false;
-                } else {
-                    oUserView.byId("idInputPhoneNumber").setValueState("None");
-                }
-            
-                // Validate ComboBox selections based on selected areas
-                selectedAreas.forEach(area => {
-                    if (!selectedItems[area]) {
-                        if (area === 'Inbound') {
-                            oUserView.byId("_IDGenComboBox2").setValueState("Error");
-                            oUserView.byId("_IDGenComboBox2").setValueStateText("Select a value from Inbound process");
-                        } else if (area === 'Outbound') {
-                            oUserView.byId("_IDGenComboBox3").setValueState("Error");
-                            oUserView.byId("_IDGenComboBox3").setValueStateText("Select a value from Outbound process");
-                        } else if (area === 'Internal') {
-                            oUserView.byId("_IDGenComboBox4").setValueState("Error");
-                            oUserView.byId("_IDGenComboBox4").setValueStateText("Select a value from Internal process");
-                        }
-                        bValid = false;
-                    } else {
-                        if (area === 'Inbound') {
-                            oUserView.byId("_IDGenComboBox2").setValueState("None");
-                        } else if (area === 'Outbound') {
-                            oUserView.byId("_IDGenComboBox3").setValueState("None");
-                        } else if (area === 'Internal') {
-                            oUserView.byId("_IDGenComboBox4").setValueState("None");
-                        }
-                    }
+            getGroupHeader: function (oGroup) {
+                return new SeparatorItem({
+                    text: oGroup.key
                 });
-            
-                if (!bValid) {
-                    sap.m.MessageToast.show("Please fill all the required fields");
-                    return; // Prevent further execution
+            },
+
+            getSelectedArea: function () {
+                // Helper method to get selected areas from checkboxes
+                var sSelectedArea = null;
+                if (this.byId("inboundCheckBox").getSelected()) {
+                    sSelectedArea = 'Inbound';
+                } else if (this.byId("outboundCheckBox").getSelected()) {
+                    sSelectedArea = 'Outbound';
+                } else if (this.byId("internalCheckBox").getSelected()) {
+                    sSelectedArea = 'Internal';
                 }
-            
-                // Send data to the backend
-                var oModel = this.getView().getModel();
-                var that = this;
-                oModel.create("/RFUISet", {
-                    Resourceid: oResource,
-                    Validity: false,
-                    Resourcename: oUsername,
-                    Area: selectedAreas,
-                    Email: oEmail,
-                    Phonenumber: oPhone,
-                    Password: oPassword,
-                    Resourcegroup: selectedItems
-                }, {
-                    success: function (oData) {
-                        sap.m.MessageToast.show("Your details are sent to the supervisor. Please wait until you get the approval.");
-                        that.oActiveLoansDialog.close();
-                    },
-                    error: function (oError) {
-                        sap.m.MessageBox.error("Error");
-                    }
-                });
-            },                      
+                return sSelectedArea;
+            },
+            onResourceLoginBtnPress: async function () {
+                var oView = this.getView();
+
+                // Retrieve values from input fields
+                var sWarehouseNumber = oView.byId("idwhInput").getValue();
+                var sResourceId = oView.byId("IdResourceInput").getValue();
+                var sPassword = oView.byId("Idpassword").getValue();
+
+                // Perform validation checks
+                if (!sWarehouseNumber) {
+                    MessageToast.show("Please enter the Warehouse Number.");
+                    return;
+                }
+                if (!sResourceId) {
+                    MessageToast.show("Please enter the Resource ID.");
+                    return;
+                }
+                if (!sPassword) {
+                    MessageToast.show("Please enter the Password.");
+                    return;
+                }
+                if (!(sWarehouseNumber && sResourceId && sPassword)) {
+                    MessageToast.show("Please enter all the details");
+                    return;
+                }
+
+                // Get the model from the component
+                var oModel = this.getOwnerComponent().getModel();
+
+                // Make the API call to check if the resource exists
+                try {
+                    await oModel.read("/RFUISet('" + sResourceId + "')", {
+                        success: function (oData) {
+                            var Id = oData.Resourceid;
+                            this.getOwnerComponent().getRouter().navTo("RouteUsermenu", { id: Id });
+                            // You can perform further actions here, like navigating to the next view
+                        }.bind(this),
+                        error: function () {
+                            sap.m.MessageToast.show("User does not exist");
+                        }
+                    });
+                } catch (error) {
+                    MessageToast.show("An error occurred while checking the user.");
+                }
+            },
+
+
+            onClearPress: function () {
+                var oView = this.getView();
+                oView.byId("idwhInput").setValue("");
+                oView.byId("IdResourceInput").setValue("");
+                oView.byId("Idpassword").setValue("");
+            },
+
+            handleLinkPress: function () {
+                // Implement the forgot password link logic here
+            }
+
         });
     });
