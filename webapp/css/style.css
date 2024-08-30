@@ -64,6 +64,7 @@
 #__vbox1{
   background-color: transparent;
 }
+/* class for the distance between the fields and the border of the reservation Id generation screen in the Admin Page  */
 .boxContainer {
   border-radius: 10px; /* Rounded corners */
   padding-left: 2rem; /* Inner spacing */
@@ -78,3 +79,20 @@
   -webkit-backdrop-filter: blur(10px); /* Safari support */
 
 }
+/* class for the distance between the lables & inputs in the Hu Details screen of HuQuery transcation  */
+.margin{
+  margin-top: 10%;
+}
+/* class for the Scan Hu label in first screen of HuQuery transcation */
+.ScanHumargin{
+  margin-top: 12%;
+  margin-right: 2000% !important;
+}
+/* class to make the simple form visbile in center of the page of the Scan Hu screen of HuQuery transcation */
+.centerContent {
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+

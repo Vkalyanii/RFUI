@@ -1,32 +1,282 @@
-<?xml version="1.0" encoding="utf-8"?>
-<edmx:Edmx Version="1.0" xmlns:edmx="http://schemas.microsoft.com/ado/2007/06/edmx" xmlns:m="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata" xmlns:sap="http://www.sap.com/Protocols/SAPData">
- <edmx:DataServices m:DataServiceVersion="2.0">
-  <Schema Namespace="ZEWM_RFUI_B_SRV" xml:lang="en" sap:schema-version="1" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
-   <Annotation Term="Core.SchemaVersion" String="1.0.0" xmlns="http://docs.oasis-open.org/odata/ns/edm"/>
-   <EntityType Name="RFUI" sap:content-version="1">
-    <Key>
-     <PropertyRef Name="Resourceid"/>
-    </Key>
-    <Property Name="Resourceid" Type="Edm.String" Nullable="false" MaxLength="6" sap:unicode="false" sap:label="EMPLOYEE ID" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
-    <Property Name="Resourcename" Type="Edm.String" Nullable="false" MaxLength="40" sap:unicode="false" sap:label="resource name" sap:quickinfo="Resource Name" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
-    <Property Name="Area" Type="Edm.String" Nullable="false" MaxLength="20" sap:unicode="false" sap:label="AREA" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
-    <Property Name="Resourcegroup" Type="Edm.String" Nullable="false" MaxLength="30" sap:unicode="false" sap:label="GROUP" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
-    <Property Name="Email" Type="Edm.String" Nullable="false" MaxLength="30" sap:unicode="false" sap:label="EMAIL" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
-    <Property Name="Phonenumber" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="PHONENUMBER" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
-    <Property Name="Notification" Type="Edm.String" Nullable="false" sap:unicode="false" sap:label="NOTIFICATION" sap:heading="NOTIFICATIONS" sap:quickinfo="NOTIFICATIONS" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
-    <Property Name="Notifysupervisor" Type="Edm.String" Nullable="false" sap:unicode="false" sap:label="NOTIFY SUPERVISOR" sap:quickinfo="NOTIFICATION SUPERVISOR" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
-    <Property Name="Status" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="Status" sap:quickinfo="status details" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
-    <Property Name="Password" Type="Edm.String" Nullable="false" MaxLength="8" sap:unicode="false" sap:label="PASSWORD" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
-    <Property Name="Approveddate" Type="Edm.String" Nullable="false" MaxLength="20" sap:unicode="false" sap:label="APPROVED DATE" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
-    <Property Name="Expirydate" Type="Edm.String" Nullable="false" MaxLength="20" sap:unicode="false" sap:label="EXPIRY DATE" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
-    <Property Name="Queue" Type="Edm.String" Nullable="false" MaxLength="50" sap:unicode="false" sap:label="QUEUE" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
-    <Property Name="Validity" Type="Edm.Boolean" Nullable="false" sap:unicode="false" sap:label="Checkbox" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
-   </EntityType>
-   <EntityContainer Name="ZEWM_RFUI_B_SRV_Entities" m:IsDefaultEntityContainer="true" sap:supported-formats="atom json xlsx">
-    <EntitySet Name="RFUISet" EntityType="ZEWM_RFUI_B_SRV.RFUI" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:pageable="false" sap:content-version="1"/>
-   </EntityContainer>
-   <atom:link rel="self" href="https://VHCALAKECI.ARTIHCUS.COM:44306/sap/opu/odata/sap/ZEWM_RFUI_B_SRV/$metadata" xmlns:atom="http://www.w3.org/2005/Atom"/>
-   <atom:link rel="latest-version" href="https://VHCALAKECI.ARTIHCUS.COM:44306/sap/opu/odata/sap/ZEWM_RFUI_B_SRV/$metadata" xmlns:atom="http://www.w3.org/2005/Atom"/>
-  </Schema>
- </edmx:DataServices>
+<?xml version="1.0" encoding="UTF-8"?>
+
+<edmx:Edmx xmlns:sap="http://www.sap.com/Protocols/SAPData" xmlns:m="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata" xmlns:edmx="http://schemas.microsoft.com/ado/2007/06/edmx" Version="1.0">
+
+
+<edmx:DataServices m:DataServiceVersion="2.0">
+
+
+<Schema xml:lang="en" xmlns="http://schemas.microsoft.com/ado/2008/09/edm" sap:schema-version="1" Namespace="ZEWM_RFUI_B_SRV">
+
+<Annotation xmlns="http://docs.oasis-open.org/odata/ns/edm" String="1.0.0" Term="Core.SchemaVersion"/>
+
+
+<EntityType sap:content-version="1" Name="RFUI">
+
+
+<Key>
+
+<PropertyRef Name="Resourceid"/>
+
+</Key>
+
+<Property Name="Resourceid" sap:label="EMPLOYEE ID" sap:unicode="false" MaxLength="6" Nullable="false" Type="Edm.String"/>
+
+<Property Name="Resourcename" sap:label="resource name" sap:unicode="false" MaxLength="40" Type="Edm.String" sap:quickinfo="Resource Name"/>
+
+<Property Name="Resouecetype" sap:label="Resource type" sap:unicode="false" MaxLength="30" Type="Edm.String"/>
+
+<Property Name="Area" sap:label="AREA" sap:unicode="false" MaxLength="20" Type="Edm.String"/>
+
+<Property Name="Resourcegroup" sap:label="GROUP" sap:unicode="false" MaxLength="150" Type="Edm.String"/>
+
+<Property Name="Email" sap:label="EMAIL" sap:unicode="false" MaxLength="30" Type="Edm.String"/>
+
+<Property Name="Phonenumber" sap:label="PHONENUMBER" sap:unicode="false" MaxLength="10" Type="Edm.String"/>
+
+<Property Name="Notification" sap:label="NOTIFICATION" sap:unicode="false" Type="Edm.String" sap:quickinfo="NOTIFICATIONS" sap:heading="NOTIFICATIONS"/>
+
+<Property Name="Notifysupervisor" sap:label="NOTIFY SUPERVISOR" sap:unicode="false" Type="Edm.String" sap:quickinfo="NOTIFICATION SUPERVISOR"/>
+
+<Property Name="Status" sap:label="Status" sap:unicode="false" MaxLength="10" Type="Edm.String" sap:quickinfo="status details"/>
+
+<Property Name="Password" sap:label="PASSWORD" sap:unicode="false" MaxLength="8" Type="Edm.String"/>
+
+<Property Name="Approveddate" sap:label="APPROVED DATE" sap:unicode="false" MaxLength="20" Type="Edm.String"/>
+
+<Property Name="Expirydate" sap:label="EXPIRY DATE" sap:unicode="false" MaxLength="20" Type="Edm.String"/>
+
+<Property Name="Queue" sap:label="QUEUE" sap:unicode="false" MaxLength="50" Type="Edm.String"/>
+
+<Property Name="Validity" sap:label="Checkbox" sap:unicode="false" Type="Edm.Boolean"/>
+
+</EntityType>
+
+
+<EntityType sap:content-version="1" Name="hu_details">
+
+
+<Key>
+
+<PropertyRef Name="Huident"/>
+
+</Key>
+
+<Property sap:updatable="false" sap:creatable="false" Name="Huident" sap:label="Handling Unit" sap:unicode="false" MaxLength="20" Nullable="false" Type="Edm.String" sap:quickinfo="Handling Unit Identification" sap:filterable="false" sap:sortable="false"/>
+
+
+<Property sap:updatable="false" sap:creatable="false" Name="Letyp" sap:label="HU Type" sap:unicode="false" MaxLength="4" Nullable="false" Type="Edm.String" sap:quickinfo="Handling Unit Type" sap:heading="Handling Unit Type" sap:filterable="false" sap:sortable="false">
+
+
+<Documentation>
+
+<Summary/>
+
+<LongDescription># Definition Key that you use to describe a handling unit. This key describes the height of the handling unit and the area where handling units with this type are stored. # Use You can assign all standard pallets (DB, JEP, disposable pallets) that are not packed to a height greater than 1m to the same type, and therefore to the same key (E1). # Dependencies The HU type of the packaging materials is taken as a default value when building a handling unit. You can change this value at a later time. # Example </LongDescription>
+
+</Documentation>
+
+</Property>
+
+<Property sap:updatable="false" sap:creatable="false" Name="Matid" sap:label="Product" sap:unicode="false" MaxLength="16" Nullable="false" Type="Edm.Binary" sap:filterable="false" sap:sortable="false"/>
+
+<Property sap:updatable="false" sap:creatable="false" Name="Quan" sap:label="Quantity" sap:unicode="false" Nullable="false" Type="Edm.Decimal" sap:quickinfo="Quantity Field" sap:filterable="false" sap:sortable="false" Scale="14" Precision="31"/>
+
+<Property sap:updatable="false" sap:creatable="false" Name="Meins" sap:label="Base Unit" sap:unicode="false" MaxLength="3" Nullable="false" Type="Edm.String" sap:quickinfo="Base Unit of Measure" sap:heading="BUn" sap:filterable="false" sap:sortable="false" sap:semantics="unit-of-measure"/>
+
+
+<Property sap:updatable="false" sap:creatable="false" Name="GWeight" sap:label="Total Weight" sap:unicode="false" Nullable="false" Type="Edm.Decimal" sap:quickinfo="Total Weight of Handling Unit" sap:filterable="false" sap:sortable="false" Scale="3" Precision="15">
+
+
+<Documentation>
+
+<Summary/>
+
+<LongDescription># Definition Specifies the total of the tare weight of the handling unit and its loading weight. # Example Your packaging material has a gross weight of 0.5 kg and a 'maximum weight' of 2 kg. You pack product 'spark plugs' in the packaging material. The maximum number of spark plugs you can pack in the packaging material is 4 (each gross weight 500 g). The loading weight of the HU is therefore 2 kg. The tare weight of the HU is the packaging material weight (0.5 kg) plus the weight of the auxiliary packaging material (0.1 kg). The total weight of the HU is your loading weight, which is 2 kg, plus your tare weight of 0.6 kg, giving a total weight of 2.6 kg.</LongDescription>
+
+</Documentation>
+
+</Property>
+
+
+<Property sap:updatable="false" sap:creatable="false" Name="NWeight" sap:label="Loading Weight" sap:unicode="false" Nullable="false" Type="Edm.Decimal" sap:quickinfo="Loading Weight of Handling Unit" sap:filterable="false" sap:sortable="false" Scale="3" Precision="15">
+
+
+<Documentation>
+
+<Summary/>
+
+<LongDescription># Definition Specifies the total weight of the contents of the handling unit. The tare weight of the handling unit (that is, the packaging material) is not included. # Example Your packaging material has a gross weight of 0.5 kg and a 'maximum weight' of 2 kg. You pack product 'spark plugs' in the packaging material. The maximum number of spark plugs you can pack in the packaging material is 4 (each gross weight 500 g). The loading weight of the HU is therefore 2 kg. The tare weight of the HU is the packaging material weight (0.5 kg) plus the weight of the auxiliary packaging material (0.1 kg). The total weight of the HU is your loading weight, which is 2 kg, plus your tare weight of 0.6 kg, giving a total weight of 2.6 kg.</LongDescription>
+
+</Documentation>
+
+</Property>
+
+
+<Property sap:updatable="false" sap:creatable="false" Name="TWeight" sap:label="HU Tare Weight" sap:unicode="false" Nullable="false" Type="Edm.Decimal" sap:quickinfo="Tare Weight of Handling Unit" sap:filterable="false" sap:sortable="false" Scale="3" Precision="15">
+
+
+<Documentation>
+
+<Summary/>
+
+<LongDescription># Definition The tare weight of the handling unit corresponds to the gross weight of the packaging material of the packing level. It consists of the weight of the packaging material plus the weight of the auxiliary packaging material. # Example Your packaging material has a gross weight of 0.5 kg and a 'maximum weight' of 2 kg. You pack product 'spark plugs' in the packaging material. The maximum number of spark plugs you can pack in the packaging material is 4 (each gross weight 500 g). The loading weight of the HU is therefore 2 kg. The tare weight of the HU is the packaging material weight (0.5 kg) plus the weight of the auxiliary packaging material (0.1 kg). The total weight of the HU is your loading weight, which is 2 kg, plus your tare weight of 0.6 kg, giving a total weight of 2.6 kg.</LongDescription>
+
+</Documentation>
+
+</Property>
+
+
+<Property sap:updatable="false" sap:creatable="false" Name="Length" sap:label="Length" sap:unicode="false" Nullable="false" Type="Edm.Decimal" sap:heading="L" sap:filterable="false" sap:sortable="false" Scale="3" Precision="15">
+
+
+<Documentation>
+
+<Summary/>
+
+<LongDescription># Definition Maximum allowed length. # Example </LongDescription>
+
+</Documentation>
+
+</Property>
+
+
+<Property sap:updatable="false" sap:creatable="false" Name="Width" sap:label="Width" sap:unicode="false" Nullable="false" Type="Edm.Decimal" sap:heading="W" sap:filterable="false" sap:sortable="false" Scale="3" Precision="15">
+
+
+<Documentation>
+
+<Summary/>
+
+<LongDescription># Definition Maximum allowed width. # Example </LongDescription>
+
+</Documentation>
+
+</Property>
+
+
+<Property sap:updatable="false" sap:creatable="false" Name="Height" sap:label="Height" sap:unicode="false" Nullable="false" Type="Edm.Decimal" sap:heading="H" sap:filterable="false" sap:sortable="false" Scale="3" Precision="15">
+
+
+<Documentation>
+
+<Summary/>
+
+<LongDescription># Definition Maximum allowed height. # Example </LongDescription>
+
+</Documentation>
+
+</Property>
+
+
+<Property sap:updatable="false" sap:creatable="false" Name="UnitLwh" sap:label="Unit" sap:unicode="false" MaxLength="3" Nullable="false" Type="Edm.String" sap:quickinfo="Unit of Dimension for Length/Width/Height" sap:heading="Unit of Dimension" sap:filterable="false" sap:sortable="false" sap:semantics="unit-of-measure">
+
+
+<Documentation>
+
+<Summary/>
+
+<LongDescription># Definition Unit in which the dimensions length, width, and height of a product or packaging of a product are measured.</LongDescription>
+
+</Documentation>
+
+</Property>
+
+
+<Property sap:updatable="false" sap:creatable="false" Name="UnitGw" sap:label="Weight Unit" sap:unicode="false" MaxLength="3" Nullable="false" Type="Edm.String" sap:heading="Un" sap:filterable="false" sap:sortable="false" sap:semantics="unit-of-measure">
+
+
+<Documentation>
+
+<Summary/>
+
+<LongDescription># Use The weight unit is used, for example, for the maximum allowed weight and the weight of products in storage bins. # Dependencies </LongDescription>
+
+</Documentation>
+
+</Property>
+
+
+<Property sap:updatable="false" sap:creatable="false" Name="GVolume" sap:label="Total Volume" sap:unicode="false" Nullable="false" Type="Edm.Decimal" sap:quickinfo="Total Volume of Handling Unit" sap:filterable="false" sap:sortable="false" Scale="3" Precision="15">
+
+
+<Documentation>
+
+<Summary/>
+
+<LongDescription># Definition Specifies the total volume of the handling unit. Determination of the total volume depends on the packaging material. For open packaging materials, such as pallets, total volume is calculated from the **tare volume** of the packaging materials and the volume of the contents. For closed packaging materials, such as boxes with lids, the total volume is equal to the tare volume of the packaging. You can use the indicator **Packaging Material is Closed Packaging** to specify whether the packaging material in question is open or closed.</LongDescription>
+
+</Documentation>
+
+</Property>
+
+
+<Property sap:updatable="false" sap:creatable="false" Name="UnitTv" sap:label="Volume Unit" sap:unicode="false" MaxLength="3" Nullable="false" Type="Edm.String" sap:heading="VUn" sap:filterable="false" sap:sortable="false" sap:semantics="unit-of-measure">
+
+
+<Documentation>
+
+<Summary/>
+
+<LongDescription># Use The volume unit is used, for example, for the maximum allowed volume and the volume of products in storage bins. # Example </LongDescription>
+
+</Documentation>
+
+</Property>
+
+
+<Property sap:updatable="false" sap:creatable="false" Name="Lgpla" sap:label="Storage Bin" sap:unicode="false" MaxLength="18" Nullable="false" Type="Edm.String" sap:heading="Stor. Bin" sap:filterable="false" sap:sortable="false">
+
+
+<Documentation>
+
+<Summary/>
+
+<LongDescription># Definition The storage bin (sometimes referred to as a "slot") is the smallest addressable unit in a warehouse. It identifies the exact location in the warehouse where goods can be stored. A storage bin can be further sub-divided into **storage bin sections**. Several different materials, or**quants**, can be stored in one bin at the same time.</LongDescription>
+
+</Documentation>
+
+</Property>
+
+</EntityType>
+
+
+<EntityType sap:content-version="1" Name="Area">
+
+
+<Key>
+
+<PropertyRef Name="Processid"/>
+
+</Key>
+
+<Property Name="Processid" sap:label="Process Id" sap:unicode="false" MaxLength="36" Nullable="false" Type="Edm.String"/>
+
+<Property Name="Processarea" sap:label="Process Area" sap:unicode="false" MaxLength="30" Type="Edm.String"/>
+
+<Property Name="Processgroup" sap:label="Process Group" sap:unicode="false" MaxLength="50" Type="Edm.String"/>
+
+<Property Name="Queue" sap:label="Queue" sap:unicode="false" MaxLength="100" Type="Edm.String"/>
+
+</EntityType>
+
+
+-<EntityContainer Name="ZEWM_RFUI_B_SRV_Entities" sap:supported-formats="atom json xlsx" m:IsDefaultEntityContainer="true">
+
+<EntitySet sap:content-version="1" sap:pageable="false" sap:deletable="false" sap:updatable="false" sap:creatable="false" Name="RFUISet" EntityType="ZEWM_RFUI_B_SRV.RFUI"/>
+
+<EntitySet sap:content-version="1" sap:pageable="false" sap:deletable="false" sap:updatable="false" sap:creatable="false" Name="hu_detailsSet" EntityType="ZEWM_RFUI_B_SRV.hu_details"/>
+
+<EntitySet sap:content-version="1" sap:pageable="false" sap:deletable="false" sap:updatable="false" sap:creatable="false" Name="AreaSet" EntityType="ZEWM_RFUI_B_SRV.Area"/>
+
+</EntityContainer>
+
+<atom:link xmlns:atom="http://www.w3.org/2005/Atom" href="http://vhcalakeci.artihcus.com:50600/sap/opu/odata/sap/ZEWM_RFUI_B_SRV/$metadata" rel="self"/>
+
+<atom:link xmlns:atom="http://www.w3.org/2005/Atom" href="http://vhcalakeci.artihcus.com:50600/sap/opu/odata/sap/ZEWM_RFUI_B_SRV/$metadata" rel="latest-version"/>
+
+</Schema>
+
+</edmx:DataServices>
+
 </edmx:Edmx>

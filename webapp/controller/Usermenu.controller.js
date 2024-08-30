@@ -60,7 +60,12 @@ function (Controller,Device,JSONModel,Popover,Button,library) {
             } else {
                 oToggleButton.setTooltip('Small Size Navigation');
             }
-        }
+        },
+        OnPressHUQuery: function () {
+            // Navigation logic
+            var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
+            oRouter.navTo("RouteHUQuery");
+        },
     });
 });
  
