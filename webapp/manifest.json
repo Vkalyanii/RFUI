@@ -113,6 +113,13 @@
           "target": [
             "TargetHUQuery"
           ]
+        },
+        {
+          "name": "RouteStockBinQueryByBin",
+          "pattern": "StockBinQueryByBin",
+          "target": [
+            "TargetStockBinQueryByBin"
+          ]
         }
       ],
       "targets": {
@@ -136,7 +143,14 @@
         "clearControlAggregation": false,
         "viewId": "HUQuery",
         "viewName": "HuQuery"
-    } 
+    },
+    "TargetStockBinQueryByBin": {                      
+      "viewType": "XML",
+      "transition": "slide",
+      "clearControlAggregation": false,
+      "viewId": "StockBinQueryByBin",
+      "viewName": "StockBinQueryByBin"
+  } 
       }
     },
     "rootView": {

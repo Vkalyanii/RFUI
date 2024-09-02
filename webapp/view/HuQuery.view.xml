@@ -98,13 +98,14 @@
             <IconTabBar
                 expanded="true"
                 id="IconTabBar"
+              
             >
                 <items>
                     <IconTabFilter
-                        id="icon1"
+                        id="IdpageScanning1"
                         visible="true"
                         key="info"
-                        text="Scanning HU"
+                        text="Scanning Bin"
                     >
                         <VBox
                             alignItems="Center"
@@ -139,20 +140,21 @@
                                         placeholder="Enter HU..."
                                         class="sapUiTinyMarginBegin"
                                     />
-                                    <ndc:BarcodeScannerButton
+                                    <!-- <ndc:BarcodeScannerButton
                                         id="sampleBarcodeScannerButtonZebraThree"
                                         scanSuccess="onScanSuccessThree"
                                         scanFail="onScanErrorThree"
                                         inputLiveUpdate="onScanLiveUpdate"
                                         dialogTitle="Barcode Scanner Button3 Sample"
                                         class="sampleBarcodeScannerButtonWithZebraEB"
-                                    />
+                                        
+                                    /> -->
                                     <!-- Barcode Scan Button -->
-                                    <!-- <Button
+                                    <Button
                                         id="_IDGenButton11"
                                         icon="sap-icon://bar-code"
                                         press="Onpressscan"
-                                    /> -->
+                                    />
                                     <!-- Submit Button -->
                                     <Button
                                         id="_IDGenButton111"
@@ -360,7 +362,7 @@
 
                     <IconTabFilter
                         id="icon3"
-                        visible="false"
+                        visible="true"
                         key="info2"
                         text="HU Content"
                     >

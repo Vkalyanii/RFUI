@@ -75,7 +75,17 @@ sap.ui.define([
             this.getView().byId("icon4").setVisible(false);
 
         },
-
+        Onpresssubmit:function(){
+       var t= this.byId("_IDGenInput1").getValue();
+    //             debugger
+    //    var oModel = this.getOwnerComponent().getModel();
+    //    oModel.read("/hu_detailsSet('"+t+"')",{success:function(oData){
+    //     sap.m.MessageToast("successfully fetched");
+    //    },
+    // errror:function(oError){
+    //     MessageBox.error(oError);
+    // }})
+        }
 
 
     });

@@ -66,6 +66,12 @@ function (Controller,Device,JSONModel,Popover,Button,library) {
             var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
             oRouter.navTo("RouteHUQuery");
         },
+        OnPressStockBinQueryByBin: function () {
+            // Navigation logic
+            var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
+            oRouter.navTo("RouteStockBinQueryByBin");
+            
+        },
     });
 });
  

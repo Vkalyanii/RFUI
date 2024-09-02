@@ -726,7 +726,7 @@
                             id="_IDStockBinQuerybyBin"
                             class="sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout tile"
                             header="Stock/Bin Query by Bin"
-                            press="OnPressStock/BinQuerybyBin"
+                            press="OnPressStockBinQueryByBin"
                         />
 
                         <GenericTile
